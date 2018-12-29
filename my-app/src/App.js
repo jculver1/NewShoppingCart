@@ -40,7 +40,7 @@ class App extends Component {
     }
 
     let newTotal = {
-      total: this.state.priceInCents
+      total: this.state.priceInCents * this.state.quantity
     }
 
     this.setState({
