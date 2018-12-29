@@ -22,15 +22,13 @@ class App extends Component {
         { id: 48, name: 'Awesome Leather Shoes', priceInCents: 3990 },
       ],
       cartList: [],
-      name: "",
-     
+      total : 0
 
     }
   }
 
   addItem = (event) => {
     event.preventDefault()
-    console.log("addItem called", event)
     
     let newItem = {
       product: {
@@ -38,10 +36,16 @@ class App extends Component {
         name: this.state.name,
         priceInCents: this.state.priceInCents
       },
-      quantity: this.state.quantity 
+      quantity: this.state.quantity
     }
+
+    let newTotal = {
+      total: this.state.priceInCents
+    }
+
     this.setState({
-      cartList: [...this.state.cartList, newItem]
+      cartList: [...this.state.cartList, newItem],
+      total: (this.state.total + newTotal.total /100.00)
     })
     console.log(newItem)
   }
@@ -50,14 +54,13 @@ class App extends Component {
   selectItem = (event) => {
     let findPrice = this.state.products.filter(product => event.target.value === product.name)
     let priceNow = findPrice.map(product => product.priceInCents)
-     
-
     event.preventDefault()
-    console.log("selectItem called", event.target.value)
     this.setState({
       name: event.target.value,
       priceInCents: priceNow[0]
+      //total: priceNow.reduce((a, b) => a + b )
     })
+
   }
 
   quantity = (event) => {
@@ -68,19 +71,22 @@ class App extends Component {
     })
   }
 
+ 
+
+
   render() {
-    var cartItemsList = [
-      { id: 1, product: { id: 40, name: 'Mediocre Iron Watch', priceInCents: 399 }, quantity: 1 },
-      { id: 2, product: { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 499 }, quantity: 2 },
-      { id: 3, product: { id: 42, name: 'Intelligent Paper Knife', priceInCents: 1999 }, quantity: 1 },
-    ]
+    //Do I still need this?
+    // var cartItemsList = [
+    //   { id: 1, product: { id: 40, name: 'Mediocre Iron Watch', priceInCents: 399 }, quantity: 1 },
+    //   { id: 2, product: { id: 41, name: 'Heavy Duty Concrete Plate', priceInCents: 499 }, quantity: 2 },
+    //   { id: 3, product: { id: 42, name: 'Intelligent Paper Knife', priceInCents: 1999 }, quantity: 1 },
+    // ]
 
     return (
       <div className="App">
         <CartHeader/>
-        <CartItems cartItemsList ={cartItemsList}/>
-        <AddItem products={this.state.products} addItem={this.addItem} selectItem={this.selectItem} quantity={this.quantity} price={this.price}/>
-        {/* <p>{cartList} </p> */}
+        <CartItems cartList ={this.state.cartList}/>
+        <AddItem products={this.state.products} addItem={this.addItem} selectItem={this.selectItem} quantity={this.quantity}  total={this.state.total}/>
         <CartFooter copyright={2016}/>
       </div>
     );
